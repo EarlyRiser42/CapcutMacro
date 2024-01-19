@@ -1,8 +1,10 @@
 import Excel from 'exceljs';
+import dotenv from 'dotenv';
+dotenv.config();
 
-async function writeToExcel(dataArray) {
+export async function writeToExcel(dataArray) {
     const workbook = new Excel.Workbook();
-    const path = 'path/to/your/excelfile.xlsx';
+    const path = process.env.OUTPUT_DIR; // 환경 변수에서 경로 읽기
 
     try {
         await workbook.xlsx.readFile(path);
@@ -10,31 +12,16 @@ async function writeToExcel(dataArray) {
         workbook.addWorksheet('My Sheet');
     }
 
-    const worksheet = workbook.getWorksheet('My Sheet');
-    let firstRow = worksheet.getRow(1);
+    const worksheet = workbook.getWorksheet('My Sheet') || workbook.addWorksheet('My Sheet');
+    const lastRowNumber = worksheet.lastRow ? worksheet.lastRow.number : 0;
 
-    if (!firstRow.getCell(1).value) {
-        firstRow.getCell(1).value = '원래이름';
+    if (lastRowNumber === 0) {
+        worksheet.addRow(['원제목', '수정된제목', '설명']);
     }
-    if (!firstRow.getCell(2).value) {
-        firstRow.getCell(2).value = '수정된이름';
-    }
-    firstRow.commit();
 
-    dataArray.forEach((data, index) => {
-        const row = worksheet.getRow(index + 2);
-        row.getCell(1).value = data.originalName;
-        row.getCell(2).value = data.modifiedName;
-        row.commit();
+    dataArray.forEach(data => {
+        worksheet.addRow([data.originalName, data.modifiedName, data.description]);
     });
 
     await workbook.xlsx.writeFile(path);
 }
-
-const myData = [
-    { originalName: 'file1', modifiedName: 'newfile1' },
-    { originalName: 'file2', modifiedName: 'newfile2' }
-    // Add more data objects as needed
-];
-
-writeToExcel(myData);

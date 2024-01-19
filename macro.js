@@ -2,25 +2,27 @@ import robot from "robotjs";
 import dotenv from 'dotenv';
 import {
     addToTimeLine,
-    changeCaptionFont, changeCaptionPosition, changeCaptionSize, exportVideo,
+    changeCaptionFont, changeCaptionPosition, changeCaptionSize, createNewVideo, exportVideo,
     getMediaFile,
     makeCaption, mouseClick,
     setAudioLength,
-    setVideoLength
+    setVideoLength, setVideoRatio
 } from "./functions/macroFunctions.js";
 import {
     getVideoLength,
     getVideoTitlesFromDir,
     parseMousePosition,
     sleep,
-    sleepTillFileAdded
+    sleepTillFileAdded, sleepTillProjectAdded
 } from "./functions/utils.js";
 import {createTitleAndDescription} from "./functions/gpt.js";
+import {writeToExcel} from "./functions/excel.js";
 dotenv.config();
 
 async function main(fileTitle) {
     sleep(3000);
-
+    createNewVideo();
+    await sleepTillProjectAdded();
     // 음성 파일 가져와서, 자막 만들기
     getMediaFile(process.env.INPUT_DIR+fileTitle);
     sleep(500)
@@ -29,6 +31,7 @@ async function main(fileTitle) {
     addToTimeLine(1);
     sleep(500)
     // 화면 비율 9:16으로 조절
+    setVideoRatio();
     // 자막 생성하고 기다리기
     await makeCaption();
     sleep(1000)
@@ -53,7 +56,7 @@ async function main(fileTitle) {
     const [TITLE, DESCRIPTION] = await createTitleAndDescription(fileTitle);
 
     // 비율맞추기 ,엑셀에 쓰기 코드짜기
-
+    await writeToExcel([{ originalName: fileTitle, modifiedName: TITLE, description: DESCRIPTION}]);
     // 내보내기
     await exportVideo(TITLE);
     let mousePosition = parseMousePosition(process.env['EXPORT_CANCEL']);

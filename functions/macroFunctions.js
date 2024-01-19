@@ -1,13 +1,26 @@
 import clipboardy from "clipboardy";
 import robot from "robotjs";
-import {getColorAt, parseMousePosition, sleep, sleepTillExport, sleepTillFileAdded} from "./utils.js";
+import {
+    parseMousePosition,
+    sleep,
+    sleepTillExport,
+    sleepTillCaptionAdded
+} from "./utils.js";
 import dotenv from "dotenv";
 import {centerOf, imageResource, mouse, screen, straightTo} from "@nut-tree/nut-js";
+import ("@nut-tree/template-matcher");
 dotenv.config();
 export const mouseClick = (x, y) => {
     robot.moveMouse(x, y);
     sleep(100)
     robot.mouseClick();
+}
+
+export const createNewVideo = () => {
+    robot.keyTap('n', ['control']);
+    sleep(500);
+    const mousePosition = parseMousePosition(process.env['NEW_VIDEO_CONFIRM']);
+    mouseClick(mousePosition.x, mousePosition.y);
 }
 
 export const getMediaFile = (path) => {
@@ -24,16 +37,7 @@ export const addToTimeLine = (number) => {
     mouseClick(mousePosition.x, mousePosition.y);
 }
 
-const sleepTillCaptionAdded = async () => {
-    let isAdded = false;
-    while (!isAdded) {
-        isAdded = await getColorAt('CAPCUT_AUTO_CAPTION_CANCEL','',{R:79, G:79,B:86,A:255});
-        if (!isAdded) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-        }
-    }
-    sleep(500);
-}
+
 
 export const makeCaption = async () => {
     const keys = [
@@ -44,6 +48,14 @@ export const makeCaption = async () => {
         sleep(500);
     });
     await sleepTillCaptionAdded();
+}
+
+export const setVideoRatio = () => {
+    let mousePosition = parseMousePosition(process.env['CAPTION_RATIO']);
+    mouseClick(mousePosition.x, mousePosition.y);
+    sleep(500);
+    mousePosition = parseMousePosition(process.env['CAPTION_RATIO_MOBILE']);
+    mouseClick(mousePosition.x, mousePosition.y);
 }
 
 export const setAudioLength = (length) => {
@@ -101,7 +113,7 @@ export const changeCaptionSize = () => {
 
 export const changeCaptionPosition = async () => {
     // 텍스트-기본의 스크롤바 클릭후 아래로 드래그
-    let mousePosition = parseMousePosition(process.env['CAPTION_POSITION_Y']);
+    let mousePosition = parseMousePosition(process.env['CAPTION_MIDDLE']);
     robot.moveMouse(mousePosition.x, mousePosition.y);
     await mouse.scrollDown(300);
     sleep(1000)
