@@ -35,13 +35,13 @@ async function main(fileTitle) {
     // 자막 크기, 위치 조정
     changeCaptionFont()
     changeCaptionSize()
-    await changeCaptionPosition() // 흠..
+    await changeCaptionPosition()
     // 뒷배경 가져오기
     getMediaFile(process.env.BACKGROUND_DIR);
     await sleepTillFileAdded(2);
     addToTimeLine(2);
     sleep(500)
-    setVideoLength(LENGTH) // 흠..
+    setVideoLength(LENGTH)
 
     // bgm 가져와서 음성 파일 길이에 맞게 편집
     getMediaFile(process.env.BGM);

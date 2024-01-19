@@ -2,7 +2,7 @@ import clipboardy from "clipboardy";
 import robot from "robotjs";
 import {getColorAt, parseMousePosition, sleep, sleepTillExport, sleepTillFileAdded} from "./utils.js";
 import dotenv from "dotenv";
-import {mouse} from "@nut-tree/nut-js";
+import {centerOf, imageResource, mouse, screen, straightTo} from "@nut-tree/nut-js";
 dotenv.config();
 export const mouseClick = (x, y) => {
     robot.moveMouse(x, y);
@@ -106,8 +106,9 @@ export const changeCaptionPosition = async () => {
     await mouse.scrollDown(300);
     sleep(1000)
     // 위치 중 Y값 선택
-    mousePosition = parseMousePosition(process.env['CAPTION_POSITION_Y']);
-    mouseClick(mousePosition.x, mousePosition.y)
+    screen.config.confidence = 0.9
+    await mouse.move(straightTo(centerOf(screen.find(imageResource("./public/capcutYPosition.png")))));
+    robot.mouseClick();
     clipboardy.writeSync('0');
     robot.keyTap('a', ['control']);
     sleep(500);

@@ -4,6 +4,7 @@
   "type": "module",
   "dependencies": {
     "@nut-tree/nut-js": "^3.1.2",
+    "@nut-tree/template-matcher": "^2.0.1",
     "clipboardy": "^4.0.0",
     "dotenv": "^16.3.1",
     "exceljs": "^4.4.0",
