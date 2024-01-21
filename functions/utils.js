@@ -70,7 +70,7 @@ export const sleepTillFileAdded = async (number) => {
 export const sleepTillExport = async () => {
     let isAdded = false;
     while (!isAdded) {
-        isAdded = await returnTrueWhenColorDifferent('EXPORT_CANCEL','',{R:12, G: 12, B: 12, A: 255});
+        isAdded = await returnTrueWhenColorSame('EXPORT_CANCEL',{R:147, G: 203, B: 240, A: 255});
         if (!isAdded) {
             await new Promise(resolve => setTimeout(resolve, 500));
         }

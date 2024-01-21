@@ -48,17 +48,18 @@ async function main(fileTitle) {
     addToTimeLine(2);
     sleep(500)
     // 연결 끊기
-    disconnect();
+    await disconnect();
     sleep(2000)
     setVideoLength(LENGTH)
 
+    /*
     // bgm 가져와서 음성 파일 길이에 맞게 편집
     getMediaFile(process.env.BGM);
     await sleepTillFileAdded(3);
     addToTimeLine(3);
     sleep(500);
     setAudioLength(LENGTH);
-
+    */
     const [TITLE, DESCRIPTION] = await createTitleAndDescription(fileTitle);
 
     // 비율맞추기 ,엑셀에 쓰기 코드짜기

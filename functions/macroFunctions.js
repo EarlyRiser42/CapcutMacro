@@ -4,7 +4,7 @@ import {
     parseMousePosition,
     sleep,
     sleepTillExport,
-    sleepTillCaptionAdded
+    sleepTillCaptionAdded, returnTrueWhenColorSame
 } from "./utils.js";
 import dotenv from "dotenv";
 import {centerOf, imageResource, mouse, screen, straightTo} from "@nut-tree/nut-js";
@@ -49,12 +49,15 @@ export const changeVoice = () => {
 
 }
 
-export const disconnect = () => {
+export const disconnect = async () => {
     let mousePosition = parseMousePosition(process.env['DISCONNECT']);
     robot.moveMouse(mousePosition.x, mousePosition.y);
-    sleep(1000)
-    robot.mouseClick();
-    sleep(300);
+    sleep(500)
+    const isConnected = await returnTrueWhenColorSame('DISCONNECT', {R:53, G: 118, B: 126, A: 255})
+    if(isConnected){
+        robot.mouseClick();
+        sleep(300);
+    }
 }
 
 export const makeCaption = async () => {
@@ -90,7 +93,7 @@ export const setAudioLength = (length) => {
 }
 
 export const setVideoLength = (length) => {
-    let mousePosition = parseMousePosition(process.env['VIDEO_SPEED']);
+    let mousePosition = parseMousePosition(process.env['VIDEO_SPEED2']);
     mouseClick(mousePosition.x, mousePosition.y);
     mousePosition = parseMousePosition(process.env['VIDEO_LENGTH']);
     mouseClick(mousePosition.x, mousePosition.y);

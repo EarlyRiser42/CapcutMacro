@@ -18,4 +18,4 @@ async function getColorAt(x, y) {
 }
 
 // 1초마다 색상을 조회
-setInterval(() => getColorAt(811, 543), 1000);
+setInterval(() => getColorAt(1119, 755), 1000);
