@@ -2,7 +2,7 @@ import robot from "robotjs";
 import dotenv from 'dotenv';
 import {
     addToTimeLine,
-    changeCaptionFont, changeCaptionPosition, changeCaptionSize, changeVoice, createNewVideo, exportVideo,
+    changeCaptionFont, changeCaptionPosition, changeCaptionSize, changeVoice, createNewVideo, disconnect, exportVideo,
     getMediaFile,
     makeCaption, mouseClick,
     setAudioLength,
@@ -47,6 +47,9 @@ async function main(fileTitle) {
     await sleepTillFileAdded(2);
     addToTimeLine(2);
     sleep(500)
+    // 연결 끊기
+    disconnect();
+    sleep(2000)
     setVideoLength(LENGTH)
 
     // bgm 가져와서 음성 파일 길이에 맞게 편집

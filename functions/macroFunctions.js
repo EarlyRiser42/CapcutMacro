@@ -49,6 +49,14 @@ export const changeVoice = () => {
 
 }
 
+export const disconnect = () => {
+    let mousePosition = parseMousePosition(process.env['DISCONNECT']);
+    robot.moveMouse(mousePosition.x, mousePosition.y);
+    sleep(1000)
+    robot.mouseClick();
+    sleep(300);
+}
+
 export const makeCaption = async () => {
     const keys = [
         'CAPCUT_TEXT', 'CAPCUT_AUTO_CAPTION', 'CAPCUT_AUTO_LANG_LIST', 'CAPCUT_AUTO_LANG_ENG',  'CAPCUT_AUTO_CAPTION_MAKE'];
