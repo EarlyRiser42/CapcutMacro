@@ -37,7 +37,17 @@ export const addToTimeLine = (number) => {
     mouseClick(mousePosition.x, mousePosition.y);
 }
 
+export const changeVoice = () => {
+    let mousePosition = parseMousePosition(process.env['CHANGE_VOICE']);
+    mouseClick(mousePosition.x, mousePosition.y);
+    sleep(500);
+    mousePosition = parseMousePosition(process.env['VOICE_FILTER']);
+    mouseClick(mousePosition.x, mousePosition.y);
+    sleep(3000);
+    mousePosition = parseMousePosition(process.env['VOICE_SWEEITE']);
+    mouseClick(mousePosition.x, mousePosition.y);
 
+}
 
 export const makeCaption = async () => {
     const keys = [

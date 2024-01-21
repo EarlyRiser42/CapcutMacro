@@ -2,7 +2,7 @@ import robot from "robotjs";
 import dotenv from 'dotenv';
 import {
     addToTimeLine,
-    changeCaptionFont, changeCaptionPosition, changeCaptionSize, createNewVideo, exportVideo,
+    changeCaptionFont, changeCaptionPosition, changeCaptionSize, changeVoice, createNewVideo, exportVideo,
     getMediaFile,
     makeCaption, mouseClick,
     setAudioLength,
@@ -23,13 +23,16 @@ async function main(fileTitle) {
     sleep(3000);
     createNewVideo();
     await sleepTillProjectAdded();
-    // 음성 파일 가져와서, 자막 만들기
+    sleep(500);
+    // 음성 파일 가져와서 타임라인에 추가
     getMediaFile(process.env.INPUT_DIR+fileTitle);
     sleep(500)
     const LENGTH = await getVideoLength(process.env.INPUT_DIR+fileTitle);
     await sleepTillFileAdded(1);
     addToTimeLine(1);
     sleep(500)
+    // 음성변조
+    changeVoice();
     // 화면 비율 9:16으로 조절
     setVideoRatio();
     // 자막 생성하고 기다리기
@@ -67,8 +70,9 @@ console.log('편집을 시작합니다. 캡컷을 전체화면으로 실행시�
 robot.setMouseDelay(0);
 robot.setKeyboardDelay(0);
 const TITLES = await getVideoTitlesFromDir(process.env.INPUT_DIR);
-TITLES.forEach((title, index) => {
+for (const title of TITLES) {
+    const index = TITLES.indexOf(title);
     console.log(`${title} 편집 시작 - ${index + 1}/${TITLES.length}`)
-    main(title).catch(console.error);
-});
+    await main(title).catch(console.error);
+}
 
